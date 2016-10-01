@@ -1,8 +1,9 @@
 package com.joanfuentes.cleanhero.domain.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Comic {
+public class Comic implements Serializable{
     private String title;
     private String description;
     private String thumbnail;

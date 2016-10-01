@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.joanfuentes.cleanhero.Application;
 import com.joanfuentes.cleanhero.R;
-import com.joanfuentes.cleanhero.presentation.presenter.model.ComicMVO;
+import com.joanfuentes.cleanhero.domain.model.Comic;
 import com.joanfuentes.cleanhero.presentation.view.instrumentation.ImageLoader;
 import com.joanfuentes.cleanhero.presentation.view.internal.di.DaggerRuntimeActivityComponent;
 import com.joanfuentes.cleanhero.presentation.view.internal.di.RuntimeActivityModule;
@@ -27,7 +27,7 @@ public class ItemDetailFragment extends Fragment {
 
     public static final String ARG_COMIC = "comic";
 
-    private ComicMVO comic;
+    private Comic comic;
 
     public ItemDetailFragment() {
         DaggerRuntimeActivityComponent
@@ -42,7 +42,7 @@ public class ItemDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments().containsKey(ARG_COMIC)) {
-            comic = (ComicMVO) getArguments().getSerializable(ARG_COMIC);
+            comic = (Comic) getArguments().getSerializable(ARG_COMIC);
             configureAppBarLayout();
         }
     }

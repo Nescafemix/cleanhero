@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.joanfuentes.cleanhero.Application;
 import com.joanfuentes.cleanhero.R;
-import com.joanfuentes.cleanhero.presentation.presenter.model.ComicMVO;
+import com.joanfuentes.cleanhero.domain.model.Comic;
 import com.joanfuentes.cleanhero.presentation.presenter.DashboardPresenter;
 import com.joanfuentes.cleanhero.presentation.view.instrumentation.ImageLoader;
 import com.joanfuentes.cleanhero.presentation.view.internal.di.DaggerRuntimeActivityComponent;
@@ -35,7 +35,7 @@ public class ItemListActivity extends BaseActivity {
 
     private boolean twoPaneMode;
     private SimpleItemRecyclerViewAdapter recyclerViewAdapter;
-    private List<ComicMVO> comics;
+    private List<Comic> comics;
 
     @Inject DashboardPresenter presenter;
     @Inject ImageLoader imageLoader;
@@ -81,7 +81,7 @@ public class ItemListActivity extends BaseActivity {
         super.onStop();
     }
 
-    private void setupFirstTimeRecyclerView(List<ComicMVO> data) {
+    private void setupFirstTimeRecyclerView(List<Comic> data) {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.item_list);
         int numberOfColumns = getResources().getInteger(R.integer.gridview_columns_number);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, numberOfColumns);
@@ -90,7 +90,7 @@ public class ItemListActivity extends BaseActivity {
         recyclerView.setAdapter(recyclerViewAdapter);
     }
 
-    public void renderComics(List<ComicMVO> comics) {
+    public void renderComics(List<Comic> comics) {
         if (recyclerViewAdapter == null) {
             this.comics = new ArrayList<>(comics);
             setupFirstTimeRecyclerView(this.comics);
@@ -118,10 +118,10 @@ public class ItemListActivity extends BaseActivity {
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<ComicMVO> mValues;
+        private final List<Comic> comics;
 
-        SimpleItemRecyclerViewAdapter(List<ComicMVO> items) {
-            mValues = items;
+        SimpleItemRecyclerViewAdapter(List<Comic> comics) {
+            this.comics = comics;
         }
 
         @Override
@@ -133,9 +133,9 @@ public class ItemListActivity extends BaseActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-            holder.title.setText(holder.mItem.getTitle());
-            imageLoader.load(holder.mItem.getThumbnail(), holder.mView.getContext(), holder.thumbnail);
+            holder.comic = comics.get(position);
+            holder.title.setText(holder.comic.getTitle());
+            imageLoader.load(holder.comic.getThumbnail(), holder.mView.getContext(), holder.thumbnail);
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -150,7 +150,7 @@ public class ItemListActivity extends BaseActivity {
 
         private void navigateToDetail(Context context, ViewHolder holder) {
             Intent intent = new Intent(context, ItemDetailActivity.class);
-            intent.putExtra(ItemDetailFragment.ARG_COMIC, holder.mItem);
+            intent.putExtra(ItemDetailFragment.ARG_COMIC, holder.comic);
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 holder.thumbnail.setTransitionName(holder.title.getText().toString());
                 ActivityOptionsCompat options = ActivityOptionsCompat.
@@ -163,7 +163,7 @@ public class ItemListActivity extends BaseActivity {
 
         private void loadDetailFragment(ViewHolder holder) {
             Bundle arguments = new Bundle();
-            arguments.putSerializable(ItemDetailFragment.ARG_COMIC, holder.mItem);
+            arguments.putSerializable(ItemDetailFragment.ARG_COMIC, holder.comic);
             ItemDetailFragment fragment = new ItemDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -173,14 +173,14 @@ public class ItemListActivity extends BaseActivity {
 
         @Override
         public int getItemCount() {
-            return mValues.size();
+            return comics.size();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             final View mView;
             final TextView title;
             final ImageView thumbnail;
-            ComicMVO mItem;
+            Comic comic;
 
             public ViewHolder(View view) {
                 super(view);
