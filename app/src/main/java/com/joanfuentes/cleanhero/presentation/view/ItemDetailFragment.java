@@ -11,11 +11,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.joanfuentes.cleanhero.Application;
 import com.joanfuentes.cleanhero.R;
 import com.joanfuentes.cleanhero.presentation.presenter.model.ComicMVO;
+import com.joanfuentes.cleanhero.presentation.view.instrumentation.ImageLoader;
+import com.joanfuentes.cleanhero.presentation.view.internal.di.DaggerRuntimeActivityComponent;
+import com.joanfuentes.cleanhero.presentation.view.internal.di.RuntimeActivityModule;
 
 import java.util.Random;
+
+import javax.inject.Inject;
 
 /**
  * A fragment representing a single Item detail screen.
@@ -24,6 +29,9 @@ import java.util.Random;
  * on handsets.
  */
 public class ItemDetailFragment extends Fragment {
+
+    @Inject ImageLoader imageLoader;
+
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -40,6 +48,12 @@ public class ItemDetailFragment extends Fragment {
      * fragment (e.g. upon screen orientation changes).
      */
     public ItemDetailFragment() {
+        DaggerRuntimeActivityComponent
+                .builder()
+                .applicationComponent(Application.getInstance().getApplicationComponent())
+                .runtimeActivityModule(new RuntimeActivityModule(this))
+                .build()
+                .inject(this);
     }
 
     @Override
@@ -53,7 +67,7 @@ public class ItemDetailFragment extends Fragment {
             if (appBarLayout != null) {
                 appBarLayout.setTitle(comic.getTitle());
                 ImageView imageToolbar = (ImageView)getActivity().findViewById(R.id.image_toolbar);
-                Glide.with(this).load(comic.getImages().get(new Random().nextInt((comic.getImages().size())))).into(imageToolbar);
+                imageLoader.load(comic.getImages().get(new Random().nextInt((comic.getImages().size()))), this.getContext(), imageToolbar);
             }
         }
     }
@@ -70,8 +84,8 @@ public class ItemDetailFragment extends Fragment {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 thumbnail.setTransitionName(comic.getTitle());
             }
+            imageLoader.load(comic.getThumbnail(), this.getContext(), thumbnail);
 
-            Glide.with(this).load(comic.getThumbnail()).into(thumbnail);
         }
 
         return rootView;

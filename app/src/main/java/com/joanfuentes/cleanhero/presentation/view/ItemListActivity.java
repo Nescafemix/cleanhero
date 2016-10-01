@@ -26,6 +26,7 @@ import com.joanfuentes.cleanhero.Application;
 import com.joanfuentes.cleanhero.R;
 import com.joanfuentes.cleanhero.presentation.presenter.model.ComicMVO;
 import com.joanfuentes.cleanhero.presentation.presenter.DashboardPresenter;
+import com.joanfuentes.cleanhero.presentation.view.instrumentation.ImageLoader;
 import com.joanfuentes.cleanhero.presentation.view.internal.di.DaggerRuntimeActivityComponent;
 import com.joanfuentes.cleanhero.presentation.view.internal.di.RuntimeActivityModule;
 
@@ -53,6 +54,7 @@ public class ItemListActivity extends BaseActivity {
     private List<ComicMVO> comics;
 
     @Inject DashboardPresenter presenter;
+    @Inject ImageLoader imageLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,7 +155,7 @@ public class ItemListActivity extends BaseActivity {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
             holder.title.setText(holder.mItem.getTitle());
-            Glide.with(holder.mView.getContext()).load(holder.mItem.getThumbnail()).into(holder.thumbnail);
+            imageLoader.load(holder.mItem.getThumbnail(), holder.mView.getContext(), holder.thumbnail);
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
