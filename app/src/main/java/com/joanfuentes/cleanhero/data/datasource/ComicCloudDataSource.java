@@ -1,7 +1,7 @@
 package com.joanfuentes.cleanhero.data.datasource;
 
 import com.joanfuentes.cleanhero.data.api.ComicApi;
-import com.joanfuentes.cleanhero.domain.model.ComicDTO;
+import com.joanfuentes.cleanhero.domain.model.Comic;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class ComicCloudDataSource {
         this.api = api;
     }
 
-    public List<ComicDTO> getComics(long characterId) {
+    public List<Comic> getComics(long characterId) {
         return api.getComics(characterId);
     }
 }

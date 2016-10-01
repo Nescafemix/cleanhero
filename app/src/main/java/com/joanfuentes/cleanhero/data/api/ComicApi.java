@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.joanfuentes.cleanhero.data.api.endpoint.ComicEndpoint;
 import com.joanfuentes.cleanhero.data.api.endpoint.model.ComicEndpointResponse;
-import com.joanfuentes.cleanhero.domain.model.ComicDTO;
+import com.joanfuentes.cleanhero.domain.model.Comic;
 import com.joanfuentes.cleanhero.data.api.model.ComicResponseMapper;
 
 import java.io.IOException;
@@ -26,8 +26,8 @@ public class ComicApi extends AbsRetrofitApi{
         this.mapper = mapper;
     }
 
-    public List<ComicDTO> getComics(long characterId) {
-        List<ComicDTO> result = Collections.emptyList();
+    public List<Comic> getComics(long characterId) {
+        List<Comic> result = Collections.emptyList();
         try {
             final Call<ComicEndpointResponse> apiCaller = endpoint
                     .getComicList(characterId, API_KEY, TS, HASH);

@@ -1,6 +1,6 @@
 package com.joanfuentes.cleanhero.domain.usecase;
 
-import com.joanfuentes.cleanhero.domain.model.ComicDTO;
+import com.joanfuentes.cleanhero.domain.model.Comic;
 import com.joanfuentes.cleanhero.data.ComicRepository;
 import com.joanfuentes.cleanhero.threading.PostExecutionThread;
 import com.joanfuentes.cleanhero.threading.ThreadExecutor;
@@ -31,7 +31,7 @@ public class GetComicsUseCase implements Runnable {
         long characterID = 1009220;
         repository.getComics(characterID, new ComicRepository.Callback() {
             @Override
-            public void onSuccess(final List<ComicDTO> comics) {
+            public void onSuccess(final List<Comic> comics) {
                 notifyOnSuccess(comics);
             }
 
@@ -48,11 +48,11 @@ public class GetComicsUseCase implements Runnable {
     }
 
     public interface Callback {
-        void onComicsReady(List<ComicDTO> comics);
+        void onComicsReady(List<Comic> comics);
         void onError();
     }
 
-    private void notifyOnSuccess(final List<ComicDTO> comics) {
+    private void notifyOnSuccess(final List<Comic> comics) {
         postExecution.post(new Runnable() {
             @Override
             public void run() {

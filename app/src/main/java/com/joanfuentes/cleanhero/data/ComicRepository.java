@@ -1,6 +1,6 @@
 package com.joanfuentes.cleanhero.data;
 
-import com.joanfuentes.cleanhero.domain.model.ComicDTO;
+import com.joanfuentes.cleanhero.domain.model.Comic;
 import com.joanfuentes.cleanhero.data.datasource.ComicCloudDataSource;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class ComicRepository {
     }
 
     public interface Callback {
-    void onSuccess(final List<ComicDTO> comics);
+    void onSuccess(final List<Comic> comics);
     void onError();
     }
 }
