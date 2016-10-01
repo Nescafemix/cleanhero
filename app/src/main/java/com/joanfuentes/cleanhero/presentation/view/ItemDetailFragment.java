@@ -1,6 +1,5 @@
 package com.joanfuentes.cleanhero.presentation.view;
 
-import android.app.Activity;
 import android.os.Build;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
@@ -22,31 +21,14 @@ import java.util.Random;
 
 import javax.inject.Inject;
 
-/**
- * A fragment representing a single Item detail screen.
- * This fragment is either contained in a {@link ItemListActivity}
- * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
- * on handsets.
- */
 public class ItemDetailFragment extends Fragment {
 
     @Inject ImageLoader imageLoader;
 
-    /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
-     */
     public static final String ARG_COMIC = "comic";
 
-    /**
-     * The dummy content this fragment is presenting.
-     */
     private ComicMVO comic;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public ItemDetailFragment() {
         DaggerRuntimeActivityComponent
                 .builder()
@@ -61,14 +43,16 @@ public class ItemDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments().containsKey(ARG_COMIC)) {
             comic = (ComicMVO) getArguments().getSerializable(ARG_COMIC);
+            configureAppBarLayout();
+        }
+    }
 
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(comic.getTitle());
-                ImageView imageToolbar = (ImageView)getActivity().findViewById(R.id.image_toolbar);
-                imageLoader.load(comic.getImages().get(new Random().nextInt((comic.getImages().size()))), this.getContext(), imageToolbar);
-            }
+    private void configureAppBarLayout() {
+        CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) this.getActivity().findViewById(R.id.toolbar_layout);
+        if (appBarLayout != null) {
+            appBarLayout.setTitle(comic.getTitle());
+            ImageView imageToolbar = (ImageView)this.getActivity().findViewById(R.id.image_toolbar);
+            imageLoader.load(comic.getImages().get(new Random().nextInt((comic.getImages().size()))), this.getContext(), imageToolbar);
         }
     }
 
@@ -76,18 +60,18 @@ public class ItemDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.item_detail, container, false);
-
-        // Show the dummy content as text in a TextView.
         if (comic != null) {
-            ((TextView) rootView.findViewById(R.id.description)).setText(comic.getDescription());
-            ImageView thumbnail = (ImageView) rootView.findViewById(R.id.image_thumbnail);
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                thumbnail.setTransitionName(comic.getTitle());
-            }
-            imageLoader.load(comic.getThumbnail(), this.getContext(), thumbnail);
-
+            setViews(rootView);
         }
-
         return rootView;
+    }
+
+    private void setViews(View rootView) {
+        ((TextView) rootView.findViewById(R.id.description)).setText(comic.getDescription());
+        ImageView thumbnail = (ImageView) rootView.findViewById(R.id.image_thumbnail);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            thumbnail.setTransitionName(comic.getTitle());
+        }
+        imageLoader.load(comic.getThumbnail(), this.getContext(), thumbnail);
     }
 }

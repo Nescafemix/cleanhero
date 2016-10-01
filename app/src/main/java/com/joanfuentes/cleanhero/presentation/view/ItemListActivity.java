@@ -6,14 +6,11 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.transition.Fade;
-import android.transition.Transition;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-import com.bumptech.glide.Glide;
 import com.joanfuentes.cleanhero.Application;
 import com.joanfuentes.cleanhero.R;
 import com.joanfuentes.cleanhero.presentation.presenter.model.ComicMVO;
@@ -35,21 +31,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-/**
- * An activity representing a list of Items. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link ItemDetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
 public class ItemListActivity extends BaseActivity {
 
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
-    private boolean mTwoPane;
+    private boolean twoPaneMode;
     private SimpleItemRecyclerViewAdapter recyclerViewAdapter;
     private List<ComicMVO> comics;
 
@@ -66,11 +50,21 @@ public class ItemListActivity extends BaseActivity {
                 .runtimeActivityModule(new RuntimeActivityModule(this))
                 .build()
                 .inject(this);
+        setTolbar();
+        setFloatingActionButton();
+        if (findViewById(R.id.item_detail_container) != null) {
+            twoPaneMode = true;
+        }
+        presenter.onStart();
+    }
 
+    private void setTolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
+    }
 
+    private void setFloatingActionButton() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,20 +73,6 @@ public class ItemListActivity extends BaseActivity {
                         .setAction("Action", null).show();
             }
         });
-
-        if (findViewById(R.id.item_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
-        presenter.onStart();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
     }
 
     @Override
@@ -158,32 +138,37 @@ public class ItemListActivity extends BaseActivity {
             imageLoader.load(holder.mItem.getThumbnail(), holder.mView.getContext(), holder.thumbnail);
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    if (mTwoPane) {
-                        Bundle arguments = new Bundle();
-                        arguments.putSerializable(ItemDetailFragment.ARG_COMIC, holder.mItem);
-                        ItemDetailFragment fragment = new ItemDetailFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.item_detail_container, fragment)
-                                .commit();
+                public void onClick(View view) {
+                    if (twoPaneMode) {
+                        loadDetailFragment(holder);
                     } else {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, ItemDetailActivity.class);
-                        intent.putExtra(ItemDetailFragment.ARG_COMIC, holder.mItem);
-                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            holder.thumbnail.setTransitionName(holder.title.getText().toString());
-                            ActivityOptionsCompat options = ActivityOptionsCompat.
-                                    makeSceneTransitionAnimation(getActivity(), holder.thumbnail, holder.title.getText().toString());
-                            context.startActivity(intent,options.toBundle());
-                        } else {
-                            context.startActivity(intent);
-                        }
-
+                        navigateToDetail(view.getContext(), holder);
                     }
                 }
             });
+        }
 
+        private void navigateToDetail(Context context, ViewHolder holder) {
+            Intent intent = new Intent(context, ItemDetailActivity.class);
+            intent.putExtra(ItemDetailFragment.ARG_COMIC, holder.mItem);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                holder.thumbnail.setTransitionName(holder.title.getText().toString());
+                ActivityOptionsCompat options = ActivityOptionsCompat.
+                        makeSceneTransitionAnimation(getActivity(), holder.thumbnail, holder.title.getText().toString());
+                context.startActivity(intent,options.toBundle());
+            } else {
+                context.startActivity(intent);
+            }
+        }
+
+        private void loadDetailFragment(ViewHolder holder) {
+            Bundle arguments = new Bundle();
+            arguments.putSerializable(ItemDetailFragment.ARG_COMIC, holder.mItem);
+            ItemDetailFragment fragment = new ItemDetailFragment();
+            fragment.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.item_detail_container, fragment)
+                    .commit();
         }
 
         @Override
@@ -192,10 +177,10 @@ public class ItemListActivity extends BaseActivity {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView title;
-            public final ImageView thumbnail;
-            public ComicMVO mItem;
+            final View mView;
+            final TextView title;
+            final ImageView thumbnail;
+            ComicMVO mItem;
 
             public ViewHolder(View view) {
                 super(view);
