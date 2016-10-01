@@ -1,6 +1,6 @@
 package com.joanfuentes.cleanhero.presentation.presenter.model;
 
-import com.joanfuentes.cleanhero.domain.model.ComicDTO;
+import com.joanfuentes.cleanhero.domain.model.Comic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,17 +11,17 @@ public class ComicMapper {
     @Inject
     public ComicMapper(){}
 
-    public List<ComicMVO> map(List<ComicDTO> comicDTOs) {
-        List<ComicMVO> comics = new ArrayList<>();
-        for (ComicDTO comicDTO: comicDTOs) {
-            ComicMVO comic = new ComicMVO.Builder()
-                    .setTitle(comicDTO.getTitle())
-                    .setDescription(comicDTO.getDescription())
-                    .setThumbnail(comicDTO.getThumbnail())
-                    .setImages(comicDTO.getImages())
+    public List<ComicMVO> map(List<Comic> comics) {
+        List<ComicMVO> comicMVOs = new ArrayList<>();
+        for (Comic comic: comics) {
+            ComicMVO comicMVO = new ComicMVO.Builder()
+                    .setTitle(comic.getTitle())
+                    .setDescription(comic.getDescription())
+                    .setThumbnail(comic.getThumbnail())
+                    .setImages(comic.getImages())
                     .build();
-            comics.add(comic);
+            comicMVOs.add(comicMVO);
         }
-        return comics;
+        return comicMVOs;
     }
 }

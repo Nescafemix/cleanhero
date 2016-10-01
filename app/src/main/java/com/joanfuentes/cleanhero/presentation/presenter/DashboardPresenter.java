@@ -2,7 +2,7 @@ package com.joanfuentes.cleanhero.presentation.presenter;
 
 import com.joanfuentes.cleanhero.presentation.presenter.model.ComicMapper;
 import com.joanfuentes.cleanhero.presentation.view.ItemListActivity;
-import com.joanfuentes.cleanhero.domain.model.ComicDTO;
+import com.joanfuentes.cleanhero.domain.model.Comic;
 import com.joanfuentes.cleanhero.domain.usecase.GetComicsUseCase;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class DashboardPresenter extends BasePresenter {
     public void onStart() {
         usecase.execute(new GetComicsUseCase.Callback() {
             @Override
-            public void onComicsReady(List<ComicDTO> comics) {
+            public void onComicsReady(List<Comic> comics) {
                 activity.renderComics(mapper.map(comics));
             }
 
