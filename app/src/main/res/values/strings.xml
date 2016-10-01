@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CleanHero</string>
+    <string name="title_item_list">Clean Hero library</string>
+    <string name="title_item_detail">Clean Hero Comic Detail</string>
+</resources>
