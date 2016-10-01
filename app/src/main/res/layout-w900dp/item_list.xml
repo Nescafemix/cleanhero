@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     android:baselineAligned="false"
     android:divider="?android:attr/dividerHorizontal"
@@ -23,9 +22,9 @@
         android:name="com.joanfuentes.nicetest.ItemListFragment"
         android:layout_width="@dimen/item_width"
         android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        app:layoutManager="LinearLayoutManager"
+        app:layoutManager="GridLayoutManager"
+        app:spanCount="@integer/gridview_columns_number"
         tools:context="com.joanfuentes.cleanhero.presentation.view.ItemListActivity"
         tools:listitem="@layout/item_list_content" />
 
