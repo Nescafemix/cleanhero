@@ -3,7 +3,7 @@ package com.joanfuentes.cleanhero.data.api.model;
 import com.joanfuentes.cleanhero.data.api.endpoint.model.ComicDataResultEndpointResponse;
 import com.joanfuentes.cleanhero.data.api.endpoint.model.ComicDataResultImageEndpointResponse;
 import com.joanfuentes.cleanhero.data.api.transformer.ImageUriTransformer;
-import com.joanfuentes.cleanhero.domain.model.ComicDTO;
+import com.joanfuentes.cleanhero.domain.model.Comic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +19,10 @@ public class ComicResponseMapper {
         this.imageUriTransformer = imageUriTransformer;
     }
 
-    public List<ComicDTO> map(List<ComicDataResultEndpointResponse> response) {
-        List<ComicDTO> comics = new ArrayList<>();
+    public List<Comic> map(List<ComicDataResultEndpointResponse> response) {
+        List<Comic> comics = new ArrayList<>();
         for (ComicDataResultEndpointResponse result: response) {
-            ComicDTO comic = new ComicDTO.Builder()
+            Comic comic = new Comic.Builder()
                     .setTitle(result.title)
                     .setDescription(result.description)
                     .setThumbnail(mapImage(result.thumbnail))
