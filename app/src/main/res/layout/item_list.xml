@@ -8,5 +8,5 @@
     android:layout_height="match_parent"
     app:layoutManager="GridLayoutManager"
     app:spanCount="@integer/gridview_columns_number"
-    tools:context="com.joanfuentes.cleanhero.presentation.view.ItemListActivity"
+    tools:context="com.joanfuentes.cleanhero.presentation.view.ComicListActivity"
     tools:listitem="@layout/item_list_content" />

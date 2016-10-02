@@ -12,7 +12,7 @@ import android.view.MenuItem;
 
 import com.joanfuentes.cleanhero.R;
 
-public class ItemDetailActivity extends BaseActivity {
+public class ComicDetailActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,17 +36,17 @@ public class ItemDetailActivity extends BaseActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Captain America was called... or was Ultron?...", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Snackbar.make(view, R.string.captain_america_was_called, Snackbar.LENGTH_LONG)
+                        .show();
             }
         });
     }
 
     private void addFragmentToTheActivity() {
         Bundle arguments = new Bundle();
-        arguments.putSerializable(ItemDetailFragment.ARG_COMIC,
-                getIntent().getSerializableExtra(ItemDetailFragment.ARG_COMIC));
-        ItemDetailFragment fragment = new ItemDetailFragment();
+        arguments.putSerializable(ComicDetailFragment.ARG_COMIC,
+                getIntent().getSerializableExtra(ComicDetailFragment.ARG_COMIC));
+        ComicDetailFragment fragment = new ComicDetailFragment();
         fragment.setArguments(arguments);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.item_detail_container, fragment)
@@ -64,7 +64,7 @@ public class ItemDetailActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            NavUtils.navigateUpTo(this, new Intent(this, ItemListActivity.class));
+            NavUtils.navigateUpTo(this, new Intent(this, ComicListActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);

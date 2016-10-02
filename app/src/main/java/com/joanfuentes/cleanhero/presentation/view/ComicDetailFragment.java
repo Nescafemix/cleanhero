@@ -21,7 +21,7 @@ import java.util.Random;
 
 import javax.inject.Inject;
 
-public class ItemDetailFragment extends Fragment {
+public class ComicDetailFragment extends Fragment {
 
     @Inject ImageLoader imageLoader;
 
@@ -29,7 +29,7 @@ public class ItemDetailFragment extends Fragment {
 
     private Comic comic;
 
-    public ItemDetailFragment() {
+    public ComicDetailFragment() {
         DaggerRuntimeActivityComponent
                 .builder()
                 .applicationComponent(Application.getInstance().getApplicationComponent())

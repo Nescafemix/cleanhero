@@ -14,7 +14,7 @@
         android:maxHeight="250dp"
         android:paddingTop="16dp"
         android:layout_margin="@dimen/fab_margin"
-        tools:context="com.joanfuentes.cleanhero.presentation.view.ItemDetailFragment" />
+        tools:context="com.joanfuentes.cleanhero.presentation.view.ComicDetailFragment" />
 
     <TextView
         android:id="@+id/description"
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:textIsSelectable="true"
-        tools:context="com.joanfuentes.cleanhero.presentation.view.ItemDetailFragment" />
+        tools:context="com.joanfuentes.cleanhero.presentation.view.ComicDetailFragment" />
 
 </LinearLayout>
 
