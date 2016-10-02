@@ -6,13 +6,11 @@ import com.joanfuentes.cleanhero.internal.di.RuntimeApplicationComponent;
 import com.joanfuentes.cleanhero.internal.di.RuntimeApplicationModule;
 
 public class Application extends android.app.Application {
-    private static Application instance;
     private RuntimeApplicationComponent applicationComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        instance = this;
         initializeInjection();
     }
 
@@ -26,9 +24,5 @@ public class Application extends android.app.Application {
 
     public ApplicationComponent getApplicationComponent() {
         return applicationComponent;
-    }
-
-    public static Application getInstance() {
-        return instance;
     }
 }
