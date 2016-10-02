@@ -23,6 +23,9 @@ public class ComicListPresenter extends BasePresenter {
         executeUseCase();
     }
 
+    @Override
+    public void onStop() { }
+
     private void executeUseCase() {
         usecase.execute(new GetComicsUseCase.Callback() {
             @Override
@@ -37,6 +40,7 @@ public class ComicListPresenter extends BasePresenter {
         });
     }
 
-    @Override
-    public void onStop() { }
+    public void refresh() {
+        executeUseCase();
+    }
 }

@@ -10,6 +10,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class GetComicsUseCase implements Runnable {
+    private static final long DEFAULT_CAPTAIN_AMERICA_CHARACTER_ID = 1009220;
     private final ThreadExecutor executor;
     private final PostExecutionThread postExecution;
     private final ComicRepository repository;
@@ -26,9 +27,7 @@ public class GetComicsUseCase implements Runnable {
 
     @Override
     public void run() {
-        //TODO: getChatacterId from SharedPreferences (we should let the user select the character)
-        //meanwhile hardcoded
-        long characterID = 1009220;
+        long characterID = DEFAULT_CAPTAIN_AMERICA_CHARACTER_ID;
         repository.getComics(characterID, new ComicRepository.Callback() {
             @Override
             public void onSuccess(final List<Comic> comics) {
