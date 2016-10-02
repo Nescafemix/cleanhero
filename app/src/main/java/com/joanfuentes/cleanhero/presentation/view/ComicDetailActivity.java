@@ -12,34 +12,43 @@ import android.view.MenuItem;
 
 import com.joanfuentes.cleanhero.R;
 
+import butterknife.BindView;
+import butterknife.OnClick;
+
 public class ComicDetailActivity extends BaseActivity {
+    @BindView(R.id.fab) FloatingActionButton floatingActionButton;
+    @BindView(R.id.detail_toolbar) Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            super.onCreate(savedInstanceState);
-        }
-        setContentView(R.layout.activity_item_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-        setSupportActionBar(toolbar);
-        setListeners();
-        showUpButtonInActionBar();
+        super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
             addFragmentToTheActivity();
-        } else {
-            super.onCreate(savedInstanceState);
         }
     }
 
-    private void setListeners() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, R.string.captain_america_was_called, Snackbar.LENGTH_LONG)
-                        .show();
-            }
-        });
+    private void setToolbar() {
+        setSupportActionBar(toolbar);
+        showUpButtonInActionBar();
+    }
+
+    @Override
+    int onRequestLayout() {
+        return R.layout.activity_item_detail;
+    }
+
+    @Override
+    void onInitializeInjection() {}
+
+    @Override
+    void onViewReady() {
+        setToolbar();
+    }
+
+    @OnClick(R.id.fab)
+    public void clickedFabButton(View view) {
+        Snackbar.make(view, R.string.captain_america_was_called, Snackbar.LENGTH_LONG)
+                .show();
     }
 
     private void addFragmentToTheActivity() {

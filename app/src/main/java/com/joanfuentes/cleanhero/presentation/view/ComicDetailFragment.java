@@ -1,9 +1,9 @@
 package com.joanfuentes.cleanhero.presentation.view;
 
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +19,24 @@ import com.joanfuentes.cleanhero.presentation.view.internal.di.RuntimeActivityMo
 
 import javax.inject.Inject;
 
-public class ComicDetailFragment extends Fragment {
+public class ComicDetailFragment extends BaseFragment {
     public static final String ARG_COMIC = "comic";
     private Comic comic;
 
     @Inject ImageLoader imageLoader;
 
-    public ComicDetailFragment() {
+    public ComicDetailFragment() {}
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments().containsKey(ARG_COMIC)) {
+            comic = (Comic) getArguments().getSerializable(ARG_COMIC);
+        }
+    }
+
+    @Override
+    void onInitializeInjection() {
         DaggerRuntimeActivityComponent
                 .builder()
                 .applicationComponent(Application.getInstance().getApplicationComponent())
@@ -35,12 +46,9 @@ public class ComicDetailFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments().containsKey(ARG_COMIC)) {
-            comic = (Comic) getArguments().getSerializable(ARG_COMIC);
-            configureAppBarLayout();
-        }
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        configureAppBarLayout();
     }
 
     private void configureAppBarLayout() {

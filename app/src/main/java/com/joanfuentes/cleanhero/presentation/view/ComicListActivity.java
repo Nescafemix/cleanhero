@@ -3,11 +3,11 @@ package com.joanfuentes.cleanhero.presentation.view;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,7 +17,6 @@ import com.joanfuentes.cleanhero.Application;
 import com.joanfuentes.cleanhero.R;
 import com.joanfuentes.cleanhero.domain.model.Comic;
 import com.joanfuentes.cleanhero.presentation.presenter.ComicListPresenter;
-import com.joanfuentes.cleanhero.presentation.view.instrumentation.ImageLoader;
 import com.joanfuentes.cleanhero.presentation.view.internal.di.DaggerRuntimeActivityComponent;
 import com.joanfuentes.cleanhero.presentation.view.internal.di.RuntimeActivityModule;
 
@@ -26,48 +25,46 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.OnClick;
+
 public class ComicListActivity extends BaseActivity {
-
-    @Inject
-    ComicListPresenter presenter;
-    @Inject ImageLoader imageLoader;
-
+    @Nullable @BindView(R.id.item_detail_container) View containerView;
+    @BindView(R.id.item_list) RecyclerView recyclerView;
+    @BindView(R.id.toolbar) Toolbar toolbar;
     private boolean twoPaneMode;
-    private ComicListAdapter recyclerViewAdapter;
     private List<Comic> comics;
 
+    @Inject ComicListPresenter presenter;
+    @Inject ComicListAdapter recyclerViewAdapter;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_list);
+    int onRequestLayout() {
+        return R.layout.activity_item_list;
+    }
+
+    @Override
+    void onInitializeInjection() {
         DaggerRuntimeActivityComponent
                 .builder()
                 .applicationComponent(((Application)getApplication()).getApplicationComponent())
                 .runtimeActivityModule(new RuntimeActivityModule(this))
                 .build()
                 .inject(this);
+    }
+
+    @Override
+    void onViewReady() {
         setToolbar();
-        setFloatingActionButton();
-        if (findViewById(R.id.item_detail_container) != null) {
+        if (containerView != null) {
             twoPaneMode = true;
         }
         presenter.onStart();
     }
 
     private void setToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
-    }
-
-    private void setFloatingActionButton() {
-        FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, R.string.you_just_gave_donation, Snackbar.LENGTH_LONG).show();
-            }
-        });
     }
 
     @Override
@@ -76,12 +73,16 @@ public class ComicListActivity extends BaseActivity {
         super.onStop();
     }
 
+    @OnClick(R.id.fab)
+    public void clickedFabButton(View view) {
+        Snackbar.make(view, R.string.you_just_gave_donation, Snackbar.LENGTH_LONG).show();
+    }
+
     private void setupFirstTimeRecyclerView(List<Comic> data) {
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.item_list);
         int numberOfColumns = getResources().getInteger(R.integer.gridview_columns_number);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, numberOfColumns);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerViewAdapter = new ComicListAdapter(data, imageLoader);
+        recyclerViewAdapter.setData(data);
         recyclerViewAdapter.setOnItemClickListener(new ComicListAdapter.Callback() {
             @Override
             public void onClick(Comic comic, ImageView imageView) {
@@ -119,7 +120,7 @@ public class ComicListActivity extends BaseActivity {
     }
 
     public void renderComics(List<Comic> comics) {
-        if (recyclerViewAdapter == null) {
+        if (recyclerView.getAdapter() == null) {
             this.comics = new ArrayList<>(comics);
             setupFirstTimeRecyclerView(this.comics);
         } else {

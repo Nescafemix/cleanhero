@@ -13,14 +13,20 @@ import com.joanfuentes.cleanhero.presentation.view.instrumentation.ImageLoader;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 class ComicListAdapter extends RecyclerView.Adapter<ComicListAdapter.ViewHolder> {
 
-    private final List<Comic> comics;
+    private List<Comic> comics;
     private Callback onItemClickListener;
     private ImageLoader imageLoader;
 
-    ComicListAdapter(List<Comic> comics, ImageLoader imageLoader) {
-        this.comics = comics;
+    @Inject
+    public ComicListAdapter(ImageLoader imageLoader) {
         this.imageLoader = imageLoader;
     }
 
@@ -35,15 +41,7 @@ class ComicListAdapter extends RecyclerView.Adapter<ComicListAdapter.ViewHolder>
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.comic = comics.get(position);
         holder.title.setText(holder.comic.getTitle());
-        holder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (onItemClickListener != null) {
-                    onItemClickListener.onClick(holder.comic, holder.thumbnail);
-                }
-            }
-        });
-        imageLoader.load(holder.comic.getThumbnail(), holder.view.getContext(), holder.thumbnail);
+        imageLoader.load(holder.comic.getThumbnail(), holder.itemView.getContext(), holder.thumbnail);
     }
 
     void setOnItemClickListener(Callback callback) {
@@ -55,22 +53,30 @@ class ComicListAdapter extends RecyclerView.Adapter<ComicListAdapter.ViewHolder>
         return comics.size();
     }
 
+    public void setData(List<Comic> comics) {
+        this.comics = comics;
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
-        final View view;
-        final TextView title;
-        final ImageView thumbnail;
-        Comic comic;
+        @BindView(R.id.title) TextView title;
+        @BindView(R.id.thumbnail) ImageView thumbnail;
+        private Comic comic;
 
         ViewHolder(View view) {
             super(view);
-            this.view = view;
-            title = (TextView) view.findViewById(R.id.title);
-            thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
+            ButterKnife.bind(this, view);
         }
 
         @Override
         public String toString() {
             return super.toString() + " '" + title.getText() + "'";
+        }
+
+        @OnClick()
+        public void clickedFabButton(View view) {
+            if (onItemClickListener != null) {
+                onItemClickListener.onClick(comic, thumbnail);
+            }
         }
     }
 
