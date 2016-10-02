@@ -25,7 +25,7 @@ public class ComicRepository {
     }
 
     public interface Callback {
-    void onSuccess(final List<Comic> comics);
-    void onError();
+        void onSuccess(final List<Comic> comics);
+        void onError();
     }
 }

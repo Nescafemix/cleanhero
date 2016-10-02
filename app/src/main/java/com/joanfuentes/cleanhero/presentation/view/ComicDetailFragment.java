@@ -17,17 +17,13 @@ import com.joanfuentes.cleanhero.presentation.view.instrumentation.ImageLoader;
 import com.joanfuentes.cleanhero.presentation.view.internal.di.DaggerRuntimeActivityComponent;
 import com.joanfuentes.cleanhero.presentation.view.internal.di.RuntimeActivityModule;
 
-import java.util.Random;
-
 import javax.inject.Inject;
 
 public class ComicDetailFragment extends Fragment {
+    public static final String ARG_COMIC = "comic";
+    private Comic comic;
 
     @Inject ImageLoader imageLoader;
-
-    public static final String ARG_COMIC = "comic";
-
-    private Comic comic;
 
     public ComicDetailFragment() {
         DaggerRuntimeActivityComponent
@@ -52,7 +48,11 @@ public class ComicDetailFragment extends Fragment {
         if (appBarLayout != null) {
             appBarLayout.setTitle(comic.getTitle());
             ImageView imageToolbar = (ImageView)this.getActivity().findViewById(R.id.image_toolbar);
-            imageLoader.load(comic.getImages().get(new Random().nextInt((comic.getImages().size()))), this.getContext(), imageToolbar);
+            if (comic.containImages()) {
+                imageLoader.load(comic.getRandomImage(), this.getContext(), imageToolbar);
+            } else {
+                imageLoader.load(comic.getThumbnail(), this.getContext(), imageToolbar);
+            }
         }
     }
 
