@@ -74,7 +74,7 @@ public class ComicListActivity extends BaseActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenter.onStart();
+                presenter.refresh();
             }
         });
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
