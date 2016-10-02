@@ -1,0 +1,12 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.joanfuentes.cleanhero.presentation.view.ComicDetailFragment"
+    tools:ignore="MergeRootFrame">
+
+    <include layout="@layout/comic_detail_content" />
+
+</android.support.design.widget.CoordinatorLayout>
+

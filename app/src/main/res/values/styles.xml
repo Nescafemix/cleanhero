@@ -25,6 +25,8 @@
         <item name="android:maxHeight">250dp</item>
         <item name="android:paddingTop">16dp</item>
         <item name="android:layout_margin">@dimen/fab_margin</item>
+        <item name="android:adjustViewBounds">true</item>
+
     </style>
 
     <style name="ComicTitle">

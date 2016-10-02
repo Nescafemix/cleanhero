@@ -23,13 +23,14 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.Optional;
 
 public class ComicDetailFragment extends BaseFragment {
     public static final String ARG_COMIC = "comic";
     private Comic comic;
-    @BindView(R.id.detail_toolbar) Toolbar toolbar;
-    @BindView(R.id.toolbar_layout) CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.image_toolbar) ImageView imageViewInToolbar;
+    @Nullable @BindView(R.id.toolbar) Toolbar toolbar;
+    @Nullable @BindView(R.id.toolbar_layout) CollapsingToolbarLayout collapsingToolbarLayout;
+    @Nullable @BindView(R.id.image_toolbar) ImageView imageViewInToolbar;
     @BindView(R.id.image_thumbnail) ImageView thumbnailImageView;
     @BindView(R.id.description) TextView descriptionTextView;
     @Inject ImageLoader imageLoader;
@@ -69,9 +70,10 @@ public class ComicDetailFragment extends BaseFragment {
     }
 
     private void setToolbar() {
-        setHasOptionsMenu(true);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        showUpButtonInActionBar();
+        if (toolbar != null) {
+            ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+            showUpButtonInActionBar();
+        }
     }
 
     private void showUpButtonInActionBar() {
@@ -101,7 +103,7 @@ public class ComicDetailFragment extends BaseFragment {
     private void configureAppBarLayout() {
         if (collapsingToolbarLayout != null) {
             collapsingToolbarLayout.setTitle(comic.getTitle());
-            if (comic.containImages()) {
+            if (comic.containImages() && imageViewInToolbar != null) {
                 imageLoader.load(comic.getRandomImage(), this.getContext(), imageViewInToolbar);
             } else {
                 imageLoader.load(comic.getThumbnail(), this.getContext(), imageViewInToolbar);
@@ -109,7 +111,7 @@ public class ComicDetailFragment extends BaseFragment {
         }
     }
 
-    @OnClick(R.id.fab)
+    @Optional @OnClick(R.id.fab)
     public void clickedFabButton(View view) {
         Snackbar.make(view, R.string.captain_america_was_called, Snackbar.LENGTH_LONG)
                 .show();
