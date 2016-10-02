@@ -8,4 +8,5 @@
     <dimen name="thumbnails_height">300dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="text_min_margin">8dp</dimen>
+    <dimen name="error_image_max_height">200dp</dimen>
 </resources>
