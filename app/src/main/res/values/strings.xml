@@ -2,4 +2,7 @@
     <string name="app_name">CleanHero</string>
     <string name="title_item_list">Clean Hero library</string>
     <string name="title_item_detail">Clean Hero Comic Detail</string>
+    <string name="error_check_connectivity">There was an error. Check your connectivity</string>
+    <string name="you_just_gave_donation">You just gave $ 10 donation to the developer. Thank you very much</string>
+    <string name="captain_america_was_called">Captain America was called… or was Ultron?…</string>
 </resources>

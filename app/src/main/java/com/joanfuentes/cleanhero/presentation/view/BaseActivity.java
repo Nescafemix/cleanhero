@@ -11,12 +11,12 @@ public class BaseActivity extends AppCompatActivity{
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            avoidBinkingBetweenAnimationsWithAnimationTransitions();
+            avoidBlinkingBetweenAnimationsWithAnimationTransitions();
         }
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void avoidBinkingBetweenAnimationsWithAnimationTransitions() {
+    private void avoidBlinkingBetweenAnimationsWithAnimationTransitions() {
         getWindow().setExitTransition(null);
         getWindow().setEnterTransition(null);
     }
