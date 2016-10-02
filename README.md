@@ -1,22 +1,15 @@
 ==================
 
-Clean Hero is...
+Clean Hero is an awesome app which list our favorite character’s comics
 
+![](http://www.webmarket24h.com/media/catalog/product/cache/1/small_image/295x295/9df78eab33525d08d6e5fb8d27136e95/3/3/3394-3077.jpg)
 
 ## Considerations
 
-### 1.- XXXXXX
+This Test was done applying Clean code arquitecture. Due to the short time for testing, and the requirements, the generated structure is very simple. I have tried to simplify to not fall into the overengineering based on what it was really needed.
+If there is any doubt I will be happy to defend my proposal.
 
-Some cool explication
-
-### 2.- YYYYYYY
-
-Some awesomic phrase
-
-
-## Inpirational resources
-
-* BLABLABLA ([@LOLOLO](https://github.com/XXXXXXX))
+The feedback is welcome :)
 
 ## License
 
