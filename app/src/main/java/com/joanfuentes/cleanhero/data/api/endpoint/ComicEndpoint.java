@@ -15,5 +15,6 @@ public interface ComicEndpoint {
     Call<ComicEndpointResponse> getComicList(@Path("id") long characterId,
                                              @Query("apikey") String apiKey,
                                              @Query("ts") String ts,
-                                             @Query("hash") String hash);
+                                             @Query("hash") String hash,
+                                             @Query("orderBy") String orderBy);
 }

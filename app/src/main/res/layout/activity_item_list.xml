@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.joanfuentes.cleanhero.presentation.view.ItemListActivity">
+    tools:context="com.joanfuentes.cleanhero.presentation.view.ComicListActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"

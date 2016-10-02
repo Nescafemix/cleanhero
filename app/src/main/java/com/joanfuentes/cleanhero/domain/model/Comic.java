@@ -2,8 +2,10 @@ package com.joanfuentes.cleanhero.domain.model;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Random;
 
 public class Comic implements Serializable{
+    private static final String NO_IMAGE = "no_image";
     private String title;
     private String description;
     private String thumbnail;
@@ -23,6 +25,18 @@ public class Comic implements Serializable{
 
     public List<String> getImages() {
         return images;
+    }
+
+    public boolean containImages() {
+        return (images.size() > 0);
+    }
+
+    public String getRandomImage() {
+        String image = NO_IMAGE;
+        if (images.size() > 0) {
+            image = images.get(new Random().nextInt(images.size()));
+        }
+        return image;
     }
 
     public static class Builder {

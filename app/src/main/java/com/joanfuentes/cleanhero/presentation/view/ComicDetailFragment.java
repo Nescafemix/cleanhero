@@ -1,9 +1,9 @@
 package com.joanfuentes.cleanhero.presentation.view;
 
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,19 +17,26 @@ import com.joanfuentes.cleanhero.presentation.view.instrumentation.ImageLoader;
 import com.joanfuentes.cleanhero.presentation.view.internal.di.DaggerRuntimeActivityComponent;
 import com.joanfuentes.cleanhero.presentation.view.internal.di.RuntimeActivityModule;
 
-import java.util.Random;
-
 import javax.inject.Inject;
 
-public class ItemDetailFragment extends Fragment {
+public class ComicDetailFragment extends BaseFragment {
+    public static final String ARG_COMIC = "comic";
+    private Comic comic;
 
     @Inject ImageLoader imageLoader;
 
-    public static final String ARG_COMIC = "comic";
+    public ComicDetailFragment() {}
 
-    private Comic comic;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments().containsKey(ARG_COMIC)) {
+            comic = (Comic) getArguments().getSerializable(ARG_COMIC);
+        }
+    }
 
-    public ItemDetailFragment() {
+    @Override
+    void onInitializeInjection() {
         DaggerRuntimeActivityComponent
                 .builder()
                 .applicationComponent(Application.getInstance().getApplicationComponent())
@@ -39,12 +46,9 @@ public class ItemDetailFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments().containsKey(ARG_COMIC)) {
-            comic = (Comic) getArguments().getSerializable(ARG_COMIC);
-            configureAppBarLayout();
-        }
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        configureAppBarLayout();
     }
 
     private void configureAppBarLayout() {
@@ -52,7 +56,11 @@ public class ItemDetailFragment extends Fragment {
         if (appBarLayout != null) {
             appBarLayout.setTitle(comic.getTitle());
             ImageView imageToolbar = (ImageView)this.getActivity().findViewById(R.id.image_toolbar);
-            imageLoader.load(comic.getImages().get(new Random().nextInt((comic.getImages().size()))), this.getContext(), imageToolbar);
+            if (comic.containImages()) {
+                imageLoader.load(comic.getRandomImage(), this.getContext(), imageToolbar);
+            } else {
+                imageLoader.load(comic.getThumbnail(), this.getContext(), imageToolbar);
+            }
         }
     }
 

@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme"
         android:name="com.joanfuentes.cleanhero.Application">
         <activity
-            android:name="com.joanfuentes.cleanhero.presentation.view.ItemListActivity"
+            android:name="com.joanfuentes.cleanhero.presentation.view.ComicListActivity"
             android:label="@string/title_item_list"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -21,13 +21,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.joanfuentes.cleanhero.presentation.view.ItemDetailActivity"
+            android:name="com.joanfuentes.cleanhero.presentation.view.ComicDetailActivity"
             android:label="@string/title_item_detail"
-            android:parentActivityName="com.joanfuentes.cleanhero.presentation.view.ItemListActivity"
+            android:parentActivityName="com.joanfuentes.cleanhero.presentation.view.ComicListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.joanfuentes.cleanhero.presentation.view.ItemListActivity" />
+                android:value="com.joanfuentes.cleanhero.presentation.view.ComicListActivity" />
         </activity>
     </application>
 
