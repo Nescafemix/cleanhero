@@ -3,7 +3,6 @@ package com.joanfuentes.cleanhero.presentation.view;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
@@ -47,7 +46,7 @@ public class ComicListActivity extends BaseActivity {
 
     @Override
     int onRequestLayout() {
-        return R.layout.activity_item_list;
+        return R.layout.activity_comic_list;
     }
 
     @Override

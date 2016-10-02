@@ -33,7 +33,7 @@ class ComicListAdapter extends RecyclerView.Adapter<ComicListAdapter.ViewHolder>
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_list_content, parent, false);
+                .inflate(R.layout.comic_list_item, parent, false);
         return new ViewHolder(view);
     }
 

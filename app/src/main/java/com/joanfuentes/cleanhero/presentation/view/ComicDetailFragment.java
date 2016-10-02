@@ -4,9 +4,11 @@ import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,10 +21,18 @@ import com.joanfuentes.cleanhero.presentation.view.internal.di.RuntimeActivityMo
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.OnClick;
+import butterknife.Optional;
+
 public class ComicDetailFragment extends BaseFragment {
     public static final String ARG_COMIC = "comic";
     private Comic comic;
-
+    @Nullable @BindView(R.id.toolbar) Toolbar toolbar;
+    @Nullable @BindView(R.id.toolbar_layout) CollapsingToolbarLayout collapsingToolbarLayout;
+    @Nullable @BindView(R.id.image_toolbar) ImageView imageViewInToolbar;
+    @BindView(R.id.image_thumbnail) ImageView thumbnailImageView;
+    @BindView(R.id.description) TextView descriptionTextView;
     @Inject ImageLoader imageLoader;
 
     public ComicDetailFragment() {}
@@ -36,13 +46,52 @@ public class ComicDetailFragment extends BaseFragment {
     }
 
     @Override
+    int onRequestLayout() {
+        return R.layout.fragment_comic_detail;
+    }
+
+    @Override
     void onInitializeInjection() {
         DaggerRuntimeActivityComponent
                 .builder()
-                .applicationComponent(Application.getInstance().getApplicationComponent())
+                .applicationComponent(((Application)getActivity().getApplication()).getApplicationComponent())
                 .runtimeActivityModule(new RuntimeActivityModule(this))
                 .build()
                 .inject(this);
+    }
+
+    @Override
+    void onViewReady() {
+        setToolbar();
+        if (comic != null) {
+            setDescription();
+            setThumbnail();
+        }
+    }
+
+    private void setToolbar() {
+        if (toolbar != null) {
+            ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+            showUpButtonInActionBar();
+        }
+    }
+
+    private void showUpButtonInActionBar() {
+        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    private void setDescription() {
+        descriptionTextView.setText(comic.getDescription());
+    }
+
+    private void setThumbnail() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            thumbnailImageView.setTransitionName(comic.getTitle());
+        }
+        imageLoader.load(comic.getThumbnail(), this.getContext(), thumbnailImageView);
     }
 
     @Override
@@ -52,34 +101,19 @@ public class ComicDetailFragment extends BaseFragment {
     }
 
     private void configureAppBarLayout() {
-        CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) this.getActivity().findViewById(R.id.toolbar_layout);
-        if (appBarLayout != null) {
-            appBarLayout.setTitle(comic.getTitle());
-            ImageView imageToolbar = (ImageView)this.getActivity().findViewById(R.id.image_toolbar);
-            if (comic.containImages()) {
-                imageLoader.load(comic.getRandomImage(), this.getContext(), imageToolbar);
+        if (collapsingToolbarLayout != null) {
+            collapsingToolbarLayout.setTitle(comic.getTitle());
+            if (comic.containImages() && imageViewInToolbar != null) {
+                imageLoader.load(comic.getRandomImage(), this.getContext(), imageViewInToolbar);
             } else {
-                imageLoader.load(comic.getThumbnail(), this.getContext(), imageToolbar);
+                imageLoader.load(comic.getThumbnail(), this.getContext(), imageViewInToolbar);
             }
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.item_detail, container, false);
-        if (comic != null) {
-            setViews(rootView);
-        }
-        return rootView;
-    }
-
-    private void setViews(View rootView) {
-        ((TextView) rootView.findViewById(R.id.description)).setText(comic.getDescription());
-        ImageView thumbnail = (ImageView) rootView.findViewById(R.id.image_thumbnail);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            thumbnail.setTransitionName(comic.getTitle());
-        }
-        imageLoader.load(comic.getThumbnail(), this.getContext(), thumbnail);
+    @Optional @OnClick(R.id.fab)
+    public void clickedFabButton(View view) {
+        Snackbar.make(view, R.string.captain_america_was_called, Snackbar.LENGTH_LONG)
+                .show();
     }
 }
