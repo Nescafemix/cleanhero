@@ -3,14 +3,18 @@ package com.joanfuentes.cleanhero.presentation.view;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.widget.ContentLoadingProgressBar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 
 import com.joanfuentes.cleanhero.Application;
@@ -30,7 +34,10 @@ import butterknife.OnClick;
 
 public class ComicListActivity extends BaseActivity {
     @Nullable @BindView(R.id.item_detail_container) View containerView;
+    @BindView(R.id.swipe_container) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.initial_progressbar) ContentLoadingProgressBar contentLoadingProgressBar;
     @BindView(R.id.item_list) RecyclerView recyclerView;
+    @BindView(R.id.error) RelativeLayout errorRelativeLayout;
     @BindView(R.id.toolbar) Toolbar toolbar;
     private boolean twoPaneMode;
     private List<Comic> comics;
@@ -56,10 +63,25 @@ public class ComicListActivity extends BaseActivity {
     @Override
     void onViewReady() {
         setToolbar();
+        setSwipe2Refresh();
         if (containerView != null) {
             twoPaneMode = true;
         }
         presenter.onStart();
+    }
+
+    private void setSwipe2Refresh() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                presenter.onStart();
+            }
+        });
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
     }
 
     private void setToolbar() {
@@ -120,6 +142,7 @@ public class ComicListActivity extends BaseActivity {
     }
 
     public void renderComics(List<Comic> comics) {
+        showList();
         if (recyclerView.getAdapter() == null) {
             this.comics = new ArrayList<>(comics);
             setupFirstTimeRecyclerView(this.comics);
@@ -130,13 +153,25 @@ public class ComicListActivity extends BaseActivity {
         }
     }
 
+    private void showList() {
+        contentLoadingProgressBar.setVisibility(View.GONE);
+        errorRelativeLayout.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void showError() {
+        contentLoadingProgressBar.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
+        errorRelativeLayout.setVisibility(View.VISIBLE);
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
     private void updateDataOnRecyclerView() {
         recyclerViewAdapter.notifyDataSetChanged();
     }
 
     public void renderError() {
-        Snackbar.make(this.getWindow().getDecorView(), R.string.error_check_connectivity,
-                Snackbar.LENGTH_LONG)
-                .show();
+        showError();
     }
 }
