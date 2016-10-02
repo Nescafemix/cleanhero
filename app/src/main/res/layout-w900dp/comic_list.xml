@@ -38,20 +38,12 @@
                 app:layoutManager="GridLayoutManager"
                 app:spanCount="@integer/gridview_columns_number"
                 tools:context="com.joanfuentes.cleanhero.presentation.view.ComicListActivity"
-                tools:listitem="@layout/item_list_content"
+                tools:listitem="@layout/comic_list_item"
                 tools:visibility="visible"/>
 
             <include layout="@layout/error_layout" />
 
-            <android.support.v4.widget.ContentLoadingProgressBar
-                style="?android:attr/progressBarStyleLarge"
-                android:id="@+id/initial_progressbar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:indeterminate="true"
-                android:visibility="visible"
-                tools:visibility="gone"/>
+            <include layout="@layout/loading_layout" />
 
         </LinearLayout>
 

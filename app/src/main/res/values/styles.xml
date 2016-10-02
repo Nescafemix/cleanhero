@@ -17,4 +17,26 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="Thumbnail">
+        <item name="android:layout_width">150dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">start</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:maxHeight">250dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:layout_margin">@dimen/fab_margin</item>
+    </style>
+
+    <style name="ComicTitle">
+        <item name="android:paddingTop">@dimen/text_min_margin</item>
+        <item name="android:paddingBottom">@dimen/text_min_margin</item>
+        <item name="android:paddingRight">@dimen/text_margin</item>
+        <item name="android:paddingLeft">@dimen/text_margin</item>
+        <item name="android:lines">2</item>
+        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textAppearance">?attr/textAppearanceListItemSmall</item>
+    </style>
+
 </resources>
