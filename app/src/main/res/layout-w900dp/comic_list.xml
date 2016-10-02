@@ -1,0 +1,57 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginRight="16dp"
+    android:baselineAligned="false"
+    android:divider="?android:attr/dividerHorizontal"
+    android:orientation="horizontal"
+    android:showDividers="middle"
+    tools:context="com.joanfuentes.cleanhero.presentation.view.ComicListActivity">
+
+    <!--
+    This layout is a two-pane layout for the Items
+    master/detail flow.
+    
+    -->
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_container"
+        android:layout_width="@dimen/item_width"
+        android:name="com.joanfuentes.nicetest.ItemListFragment"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/item_list"
+                android:name="com.joanfuentes.nicetest.ItemListFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                app:layoutManager="GridLayoutManager"
+                app:spanCount="@integer/gridview_columns_number"
+                tools:context="com.joanfuentes.cleanhero.presentation.view.ComicListActivity"
+                tools:listitem="@layout/comic_list_item"
+                tools:visibility="visible"/>
+
+            <include layout="@layout/error_layout" />
+
+            <include layout="@layout/loading_layout" />
+
+        </LinearLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <FrameLayout
+        android:id="@+id/item_detail_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3" />
+
+</LinearLayout>

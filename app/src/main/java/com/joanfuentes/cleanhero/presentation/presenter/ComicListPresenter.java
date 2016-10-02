@@ -20,6 +20,10 @@ public class ComicListPresenter extends BasePresenter {
 
     @Override
     public void onStart() {
+        executeUseCase();
+    }
+
+    private void executeUseCase() {
         usecase.execute(new GetComicsUseCase.Callback() {
             @Override
             public void onComicsReady(List<Comic> comics) {
